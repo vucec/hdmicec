@@ -22,6 +22,7 @@ from Screens.MessageBox import MessageBox
 from Tools import Notifications
 from HdmiCec import HdmiCec
 from os import system
+import logging
 
 hdmi_cec = HdmiCec()
 
@@ -314,10 +315,20 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 def openconfig(session, **kwargs):
 	session.open(HdmiCecPlugin)
 
+log = None
+
 def autostart(reason, **kwargs):
 	global session
+	global log
 	if kwargs.has_key("session") and reason == 0:
 		if config.hdmicec.enabled.value:
+			if config.hdmicec.logenabledfile.value:
+				log = logging.getLogger('VTI HDMI-CEC')
+				log.setLevel(logging.INFO)
+				loghandler = logging.FileHandler('/tmp/hdmicec.log')
+				loghandler.setFormatter(logging.Formatter('%(asctime)s [%(name)s] %(levelname)s %(message)s'))
+				log.addHandler(loghandler)
+				log.info('PlugIn Start')
 			session = kwargs["session"]
 			if config.hdmicec.avvolumecontrol.value:
 				## from InfoBarGenerics.py
@@ -355,6 +366,7 @@ def volumekeyPressed(key, flag):
 
 
 def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
+	global log
 	data = 16 * '\x00'
 	if cecdata is not None:
 		message = cecdata.getCommand()
@@ -367,9 +379,11 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 	if logcmd:
 		if config.hdmicec.logenabledserial.value:
 			vtilog(logcmd)
-			if config.hdmicec.logenabledfile.value:
-				filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
-				system(filelog)
+#			if config.hdmicec.logenabledfile.value:
+#				filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
+#				system(filelog)
+		if log:
+			log.info(logcmd)
 
 	if config.hdmicec.enabled.value:
 		from Screens.Standby import inStandby
