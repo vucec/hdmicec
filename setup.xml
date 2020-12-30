@@ -1,0 +1,21 @@
+<setupxml>
+	<setup key="hdmi_cec" showOpenWebIF="1" title="HDMI CEC">
+		<item level="0" text="HDMI CEC enabled">config.hdmicec.enabled</item>
+		<item level="0" text="Set VU+ device name">config.hdmicec.device_name</item>
+		<item level="0" text="Choose TV HDMI input">config.hdmicec.tvinput</item>
+		<item level="0" text="Choose A/V-Receiver HDMI input">config.hdmicec.avinput</item>
+		<item level="0" text="VU+ standby => TV activity">config.hdmicec.standby_message</item>
+		<item level="0" text="VU+ deepstandby => TV activity">config.hdmicec.deepstandby_message</item>
+		<item level="0" text="VU+ on from standby => TV activity">config.hdmicec.wakeupstandby_message</item>
+		<item level="0" text="VU+ on from deepstandby => TV activity">config.hdmicec.wakeupdeepstandby_message</item>
+		<item level="0" text="TV standby => VU+ activity">config.hdmicec.vustandby_message</item>
+		<item level="0" text="TV on => VU+ activity">config.hdmicec.vuwakeup_message</item>
+		<item level="0" text="Disable power on actions for timer">config.hdmicec.disabletimerwakeup</item>
+		<item level="0" text="Use A/V-Receiver for volume control">config.hdmicec.avvolumecontrol</item>
+		<item level="0" text="Use TV remotecontrol">config.hdmicec.enabletvrc</item>
+		<item level="0" text="Active Source Reply On">config.hdmicec.standby_message</item>
+		<item level="0" text="Delay between CEC messages">config.hdmicec.message_delay</item>
+		<item level="0" text="Enable debug output to file">config.hdmicec.logenabledfile</item>
+		<item level="0" text="Enable debug output to console">config.hdmicec.logenabledserial</item>
+	</setup>
+</setupxml>
