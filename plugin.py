@@ -24,6 +24,12 @@ from HdmiCec import HdmiCec
 from os import system
 import logging
 
+import inspect
+
+def loghdr():
+    """Returns log header with current line number in plugin.py."""
+    return "[VTI HDMI-CEC] P%03d  " % inspect.currentframe().f_back.f_lineno
+
 hdmi_cec = HdmiCec()
 
 class HdmiCecPlugin(Screen,ConfigListScreen):
@@ -149,7 +155,7 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 		cecmessagetwo = physaddress1
 		cecmessagethree = physaddress2
 		cmd = struct.pack('BBB',cecmessage,cecmessagetwo,cecmessagethree)
-		logcmd = "[VTI HDMI-CEC] send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
+		logcmd = loghdr()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
 
 		if cmd:
 			eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
@@ -157,9 +163,11 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 		if logcmd:
 			if config.hdmicec.logenabledserial.value:
 				vtilog(logcmd)
-				if config.hdmicec.logenabledfile.value:
-					filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
-					system(filelog)
+				#if config.hdmicec.logenabledfile.value:
+				#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
+				#	system(filelog)
+			if hdmi_cec.log:
+				hdmi_cec.log.info(logcmd)
 
 # only used for testing
 	def keySend(self):
@@ -187,7 +195,7 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 			if val4 not in range(0,256):
 				val4 = 00
 			cmd = struct.pack('BBBB',val1,val2,val3,val4)
-			logcmd = "[VTI HDMI-CEC] ** Test Message ** Send message value: %x:%x:%x:%x to address %x" % (val1,val2,val3,val4,address)
+			logcmd = loghdr()+"** Test Message ** Send message value: %x:%x:%x:%x to address %x" % (val1,val2,val3,val4,address)
 		else:
 
 			if tmp3:
@@ -201,7 +209,7 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 				if val3 not in range(0,256):
 					val3 = 00
 				cmd = struct.pack('BBB',val1,val2,val3)
-				logcmd = "[VTI HDMI-CEC] ** Test Message ** Send message value: %x:%x:%x to address %x" % (val1,val2,val3,address)
+				logcmd = loghdr()+"** Test Message ** Send message value: %x:%x:%x to address %x" % (val1,val2,val3,address)
 			else:
 
 				if tmp2:
@@ -212,13 +220,13 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 					if val2 not in range(0,256):
 						val2 = 00
 					cmd = struct.pack('BB',val1,val2)
-					logcmd = "[VTI HDMI-CEC] ** Test Message ** Send message value: %x:%x to address %x" % (val1,val2,address)
+					logcmd = loghdr()+"** Test Message ** Send message value: %x:%x to address %x" % (val1,val2,address)
 				else:
 					val1=int(tmp1,16)
 					if val1 not in range(0,256):
 						val1 = 00
 					cmd = struct.pack('B',val1)
-					logcmd = "[VTI HDMI-CEC] ** Test Message ** Send message value: %x to address %x" % (val1, address)
+					logcmd = loghdr()+"** Test Message ** Send message value: %x to address %x" % (val1, address)
 
 		if cmd:
 			eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
@@ -226,9 +234,11 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 		if logcmd:
 			if config.hdmicec.logenabledserial.value:
 				vtilog(logcmd)
-				if config.hdmicec.logenabledfile.value:
-					filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
-					system(filelog)
+				#if config.hdmicec.logenabledfile.value:
+				#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
+				#	system(filelog)
+			if hdmi_cec.log:
+				hdmi_cec.log.info(logcmd)
 # end testing
 
 	def keyOk(self):
@@ -239,41 +249,41 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 			cecmessage = int("44",16)
 			cecmessagetwo = int("41",16)
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = "[VTI HDMI-CEC] send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 		elif self["config"].getCurrent() == self.hdmiavvoldown:
 			address = int("5",16)
 			cecmessage = int("44",16)
 			cecmessagetwo = int("42",16)
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = "[VTI HDMI-CEC] send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 		elif self["config"].getCurrent() == self.hdmiavvolmute:
 			address = int("5",16)
 			cecmessage = int("44",16)
 			cecmessagetwo = int("43",16)
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = "[VTI HDMI-CEC] send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 		elif self["config"].getCurrent() == self.hdmiavpwron:
 			address = int("5",16)
 			cecmessage = int("44",16)
 			cecmessagetwo = int("6D",16)
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = "[VTI HDMI-CEC] send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 		elif self["config"].getCurrent() == self.hdmiavpwroff:
 			address = int("5",16)
 			cecmessage = int("44",16)
 			cecmessagetwo = int("6C",16)
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = "[VTI HDMI-CEC] send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 		elif self["config"].getCurrent() == self.hdmitvpwroff:
 			address = int("0",16)
 			cecmessage = int("36",16)
 			cmd = struct.pack('B',cecmessage)
-			logcmd = "[VTI HDMI-CEC] send cec message %x to %x" % (cecmessage,address)
+			logcmd = loghdr()+"send cec message %x to %x" % (cecmessage,address)
 		elif self["config"].getCurrent() == self.hdmitvpwron:
 			address = int("0",16)
 			cecmessage = int("04",16)
 			cmd = struct.pack('B',cecmessage)
-			logcmd = "[VTI HDMI-CEC] send cec message %x to %x" % (cecmessage,address)
+			logcmd = loghdr()+"send cec message %x to %x" % (cecmessage,address)
 		else:
 			ConfigListScreen.keySave(self)
 		if cmd:
@@ -282,9 +292,11 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 		if logcmd:
 			if config.hdmicec.logenabledserial.value:
 				vtilog(logcmd)
-				if config.hdmicec.logenabledfile.value:
-					filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
-					system(filelog)
+				#if config.hdmicec.logenabledfile.value:
+				#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
+				#	system(filelog)
+			if hdmi_cec.log:
+				hdmi_cec.log.info(logcmd)
 
 	def keyConnect(self):
 			hdmi_cec.activateSourceTimer()
@@ -323,12 +335,12 @@ def autostart(reason, **kwargs):
 	if kwargs.has_key("session") and reason == 0:
 		if config.hdmicec.enabled.value:
 			if config.hdmicec.logenabledfile.value:
-				log = logging.getLogger('VTI HDMI-CEC')
-				log.setLevel(logging.INFO)
-				loghandler = logging.FileHandler('/tmp/hdmicec.log')
-				loghandler.setFormatter(logging.Formatter('%(asctime)s [%(name)s] %(levelname)s %(message)s'))
-				log.addHandler(loghandler)
-				log.info('PlugIn Start')
+				hdmi_cec.log = logging.getLogger("VTI HDMI-CEC")
+				hdmi_cec.log.setLevel(logging.INFO)
+				loghandler = logging.FileHandler("/tmp/hdmicec.log")
+				loghandler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+				hdmi_cec.log.addHandler(loghandler)
+				hdmi_cec.log.info(loghdr()+"** PlugIn Start")
 			session = kwargs["session"]
 			if config.hdmicec.avvolumecontrol.value:
 				## from InfoBarGenerics.py
@@ -375,15 +387,15 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 	elif manual_address is not None and manual_cmd is not None:
 		message = manual_cmd
 		address = manual_address
-	logcmd = "[VTI HDMI-CEC] received cec message %x from %x" % (message, address)
+	logcmd = loghdr()+"received cec message %x from %x" % (message, address)
 	if logcmd:
 		if config.hdmicec.logenabledserial.value:
 			vtilog(logcmd)
-#			if config.hdmicec.logenabledfile.value:
-#				filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
-#				system(filelog)
-		if log:
-			log.info(logcmd)
+			#if config.hdmicec.logenabledfile.value:
+			#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
+			#	system(filelog)
+		if hdmi_cec.log:
+			hdmi_cec.log.info(logcmd)
 
 	if config.hdmicec.enabled.value:
 		from Screens.Standby import inStandby
@@ -430,14 +442,14 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 			if (inStandby) and (config.hdmicec.vuwakeup_message.value == "vuwakeup"):
 				cecmessagetwo = powerstateOff
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = "[VTI HDMI-CEC] send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 
 		if message == 0x9f: # request cec version
 			address = addresstv
 			cecmessage = cecversionreportmessage
 			cecmessagetwo = cecversionmessage
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = "[VTI HDMI-CEC] send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 
 		elif message == 0x83: # request physical address
 			if (inStandby) and (config.hdmicec.vuwakeup_message.value == "vuwakeup"):
@@ -448,7 +460,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 			cecmessagethree = physaddress2
 			cecmessagefour = devicetypmessage
 			cmd = struct.pack('BBBB',cecmessage,cecmessagetwo,cecmessagethree,cecmessagefour)
-			logcmd = "[VTI HDMI-CEC] send cec message %x:%x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,cecmessagefour,address)
+			logcmd = loghdr()+"send cec message %x:%x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,cecmessagefour,address)
 
 		elif message == 0x86:
 			physicaladdress = ord(data[0]) * 256 + ord(data[1])
@@ -462,7 +474,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 				cecmessagetwo = physaddress1
 				cecmessagethree = physaddress2
 				cmd = struct.pack('BBB',cecmessage,cecmessagetwo,cecmessagethree)
-				logcmd = "[VTI HDMI-CEC] send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
+				logcmd = loghdr()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
 				eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
 				if config.hdmicec.enabletvrc.value:
 					addresstwo = addresstv
@@ -471,7 +483,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 					cmdtwo = struct.pack('BB',cecmessage,cecmessagetwo)
 					eHdmiCEC.getInstance().sendMessage(addresstwo, len(cmdtwo), str(cmdtwo))
 			else:
-				logcmd = "[VTI HDMI-CEC] received %x with data %x my conf %s" % (message,physicaladdress, confAddress)
+				logcmd = loghdr()+"received %x with data %x my conf %s" % (message,physicaladdress, confAddress)
 
 		elif message == 0x8d: # request menu state
 			if config.hdmicec.enabletvrc.value:
@@ -479,7 +491,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 				cecmessage = menuonmessage
 				cecmessagetwo = menustatemessage
 				cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-				logcmd = "[VTI HDMI-CEC] send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+				logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 
 		elif message == 0x46: # request device name
 			address = addresstv
@@ -491,7 +503,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 			else:
 				cecmessagetwo = config.hdmicec.device_name.value
 				cmd = struct.pack('B'+str(name_len+1)+'s',cecmessage,cecmessagetwo)
-			logcmd = "[VTI HDMI-CEC] send cec message %x:%s to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = loghdr()+"send cec message %x:%s to %x" % (cecmessage,cecmessagetwo,address)
 
 		elif message == 0x85: # request active source
 			if not inStandby:
@@ -501,13 +513,13 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 					cecmessagetwo = physaddress1
 					cecmessagethree = physaddress2
 					cmd = struct.pack('BBB',cecmessage,cecmessagetwo,cecmessagethree)
-					logcmd = "[VTI HDMI-CEC] send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
+					logcmd = loghdr()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
 				if config.hdmicec.enabletvrc.value:
 					addresstwo = addresstv
 					cecmessage = menuonmessage
 					cecmessagetwo = menustatemessage
 					cmdtwo = struct.pack('BB',cecmessage,cecmessagetwo)
-					logcmdtwo = "[VTI HDMI-CEC] send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+					logcmdtwo = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 			elif inStandby:
 				if config.hdmicec.vuwakeup_message.value == "vuwakeup":
 					inStandby.Power()
@@ -516,22 +528,22 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 					cecmessagetwo = physaddress1
 					cecmessagethree = physaddress2
 					cmd = struct.pack('BBB',cecmessage,cecmessagetwo,cecmessagethree)
-					logcmd = "[VTI HDMI-CEC] send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
+					logcmd = loghdr()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
 					if config.hdmicec.enabletvrc.value:
 						addresstwo = addresstv
 						cecmessage = menuonmessage
 						cecmessagetwo = menustatemessage
 						cmdtwo = struct.pack('BB',cecmessage,cecmessagetwo)
-						logcmdtwo = "[VTI HDMI-CEC] send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+						logcmdtwo = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 
 		elif message == 0x36:
 			if config.hdmicec.vustandby_message.value == "vustandby":
 				if inStandby == None:
-					logcmd = "[VTI HDMI-CEC] VU+ STB goto standby"
+					logcmd = loghdr()+"VU+ STB goto standby"
 					session.open(Standby)
 			elif config.hdmicec.vustandby_message.value == "vudeepstandby":
 				import Screens.Standby
-				logcmd = "[VTI HDMI-CEC] VU+ STB goto deepstandby"
+				logcmd = loghdr()+"VU+ STB goto deepstandby"
 				session.open(Screens.Standby.TryQuitMainloop,1)
 
 		if inStandby == None:
@@ -542,24 +554,30 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 			if logcmd:
 				if config.hdmicec.logenabledserial.value:
 					vtilog(logcmd)
-					if config.hdmicec.logenabledfile.value:
-						filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
-						system(filelog)
+					#if config.hdmicec.logenabledfile.value:
+					#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
+					#	system(filelog)
+				if hdmi_cec.log:
+					hdmi_cec.log.info(logcmd)
 			if logcmdtwo:
 				if config.hdmicec.logenabledserial.value:
 					vtilog(logcmdtwo)
-					if config.hdmicec.logenabledfile.value:
-						filelog = "echo %s >> /tmp/hdmicec.log" % (logcmdtwo)
-						system(filelog)
+					#if config.hdmicec.logenabledfile.value:
+					#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmdtwo)
+					#	system(filelog)
+				if hdmi_cec.log:
+					hdmi_cec.log.info(logcmdtwo)
 
 def messageReceivedKey(address, message):
-	logcmd = "[VTI HDMI-CEC] received cec message part two %x from %x" % (message, address)
+	logcmd = loghdr()+"received cec message part two %x from %x" % (message, address)
 	if logcmd:
 		if config.hdmicec.logenabledserial.value:
 			vtilog(logcmd)
-			if config.hdmicec.logenabledfile.value:
-				filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
-				system(filelog)
+			#if config.hdmicec.logenabledfile.value:
+			#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
+			#	system(filelog)
+		if hdmi_cec.log:
+			hdmi_cec.log.info(logcmd)
 
 	if config.hdmicec.enabled.value is True:
 		rcdevicename = iInputDevices.getDeviceName('event0') # hschang : get rc device name, /dev/input/event0
