@@ -377,9 +377,30 @@ def volumekeyPressed(key, flag):
 	return 0
 
 
+CecMsg = {
+			0x32: "Unknown",
+			0x36: "StandBy ???",
+			0x46: "Request Device Name",
+			0x47: "Set Name",
+			0x82: "Active Source",
+			0x83: "Request Physical Address",
+			0x84: "Physical Address",
+			0x85: "Request Active Source",
+			0x87: "Vendor ID",
+			0x8c: "Unknown",
+			0x8d: "Request Menu State",
+			0x8e: "Menu On",
+			0x8f: "Request Power State",
+			0x90: "Power State",
+			0x9e: "CEC Version",
+			0x9f: "Request CEC Version",
+			0xa0: "Unknown"
+}
+
 def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 	global log
 	data = 16 * '\x00'
+	length = 0
 	if cecdata is not None:
 		message = cecdata.getCommand()
 		address = cecdata.getAddress()
@@ -387,7 +408,10 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 	elif manual_address is not None and manual_cmd is not None:
 		message = manual_cmd
 		address = manual_address
-	logcmd = loghdr()+"received cec message %x from %x" % (message, address)
+	#logcmd = loghdr()+"received cec message %x from %x" % (message, address)
+	logcmd = loghdr()+"Recv  %02x: %02x (%s) %2d" % (address, message, CecMsg.get(message, "Unknown Message"), length)
+	for ci in range(length):
+		logcmd += " %02x" % ord(data[ci])
 	if logcmd:
 		if config.hdmicec.logenabledserial.value:
 			vtilog(logcmd)
@@ -569,7 +593,8 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 					hdmi_cec.log.info(logcmdtwo)
 
 def messageReceivedKey(address, message):
-	logcmd = loghdr()+"received cec message part two %x from %x" % (message, address)
+	#logcmd = loghdr()+"received cec message part two %x from %x" % (message, address)
+	logcmd = loghdr()+"RecvK %02x: %02x" % (address, message)
 	if logcmd:
 		if config.hdmicec.logenabledserial.value:
 			vtilog(logcmd)
