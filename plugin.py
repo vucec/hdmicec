@@ -378,23 +378,29 @@ def volumekeyPressed(key, flag):
 
 
 CecMsg = {
+			0x00: "Feature Abort / Unsupported",
+			0x04: "TV Image View On",
+			0x0d: "TV Text View On",
 			0x32: "Unknown",
-			0x36: "StandBy ???",
+			0x36: "Standby",
 			0x46: "Request Device Name",
 			0x47: "Set Name",
-			0x82: "Active Source",
+			0x82: "Active Source  PhyAdr :",
 			0x83: "Request Physical Address",
-			0x84: "Physical Address",
+			0x84: "Physical Address :",
 			0x85: "Request Active Source",
-			0x87: "Vendor ID",
+			0x87: "Vendor ID :",
 			0x8c: "Unknown",
 			0x8d: "Request Menu State",
 			0x8e: "Menu On",
 			0x8f: "Request Power State",
-			0x90: "Power State",
-			0x9e: "CEC Version",
+			0x90: "Power State :",
+			0x91: "Get Menu Language",
+			0x9d: "Inactive Source  PhyAdr :",
+			0x9e: "CEC Version :",
 			0x9f: "Request CEC Version",
-			0xa0: "Unknown"
+			0xa0: "Unknown",
+			0xff: "Abort / Reserved"
 }
 
 def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
