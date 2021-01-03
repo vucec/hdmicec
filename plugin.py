@@ -415,7 +415,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 		message = manual_cmd
 		address = manual_address
 	#logcmd = loghdr()+"received cec message %x from %x" % (message, address)
-	logcmd = loghdr()+"Recv  %02x: %02x (%s) %2d" % (address, message, CecMsg.get(message, "Unknown Message"), length)
+	logcmd = loghdr()+"%1x>%1x %02x (%s)" % (address&0xF, address>>4, message, CecMsg.get(message, "Unknown Message"))
 	for ci in range(length):
 		logcmd += " %02x" % ord(data[ci])
 	if logcmd:
