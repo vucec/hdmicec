@@ -418,14 +418,13 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 	logcmd = loghdr()+"%1x>%1x %02x (%s)" % (address&0xF, address>>4, message, CecMsg.get(message, "Unknown Message"))
 	for ci in range(length):
 		logcmd += " %02x" % ord(data[ci])
-	if logcmd:
-		if config.hdmicec.logenabledserial.value:
-			vtilog(logcmd)
-			#if config.hdmicec.logenabledfile.value:
-			#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
-			#	system(filelog)
-		if hdmi_cec.log:
-			hdmi_cec.log.info(logcmd)
+	if config.hdmicec.logenabledserial.value:
+		vtilog(logcmd)
+		#if config.hdmicec.logenabledfile.value:
+		#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
+		#	system(filelog)
+	if hdmi_cec.log:
+		hdmi_cec.log.info(logcmd)
 
 	if config.hdmicec.enabled.value:
 		from Screens.Standby import inStandby
