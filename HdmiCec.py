@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# maintainer: <plnick@vuplus-support.org>
+# maintainer: <info@vuplus-support.org>
 
 #This plugin is free software, you are allowed to
 #modify it (if you keep the license),
