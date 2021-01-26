@@ -329,6 +329,8 @@ def openconfig(session, **kwargs):
 
 log = None
 
+import enigma
+
 def autostart(reason, **kwargs):
 	global session
 	global log
@@ -341,6 +343,10 @@ def autostart(reason, **kwargs):
 				loghandler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
 				hdmi_cec.log.addHandler(loghandler)
 				hdmi_cec.log.info(loghdr()+"** PlugIn Start")
+				#hdmi_cec.log.info(loghdr()+str(eHdmiCEC.__dict__))
+				#hdmi_cec.log.info(loghdr()+str(enigma.__dict__))
+				#hdmi_cec.log.info(loghdr()+str(enigma.iCECMessagePtr))
+				#hdmi_cec.log.info(loghdr()+str(enigma.iCECMessagePtr.__dict__))
 			session = kwargs["session"]
 			if config.hdmicec.avvolumecontrol.value:
 				## from InfoBarGenerics.py
@@ -408,6 +414,12 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 	data = 16 * '\x00'
 	length = 0
 	if cecdata is not None:
+		#if hdmi_cec.log:
+		#	hdmi_cec.log.info(loghdr()+str(cecdata))
+		#	hdmi_cec.log.info(loghdr()+str(cecdata.__dict__))
+		#	hdmi_cec.log.info(loghdr()+str(cecdata.__dir__()))
+		#	hdmi_cec.log.info(loghdr()+str(cecdata.this))
+		#	#hdmi_cec.log.info(loghdr()+str(iCECMessage.__dict__))
 		message = cecdata.getCommand()
 		address = cecdata.getAddress()
 		length = cecdata.getData(data, len(data))
