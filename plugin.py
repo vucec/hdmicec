@@ -342,9 +342,9 @@ def autostart(reason, **kwargs):
 				hdmi_cec.log.addHandler(loghandler)
 				hdmi_cec.log.info(lineno()+"** PlugIn Start")
 			session = kwargs["session"]
-			if config.hdmicec.avvolumecontrol.value:
+			#if config.hdmicec.avvolumecontrol.value:
 				## from InfoBarGenerics.py
-				eActionMap.getInstance().bindAction('', -0x7FFFFFFF, volumekeyPressed)
+			eActionMap.getInstance().bindAction('', -0x7FFFFFFF, volumekeyPressed)
 				##
 			eHdmiCEC.getInstance().cecMessageReceived.get().append(messageReceived)
 			eHdmiCEC.getInstance().messageReceivedKey.get().append(messageReceivedKey)
