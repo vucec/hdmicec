@@ -368,6 +368,16 @@ def volumekeyPressed(key, flag):
 		hdmi_cec.log.info(logcmd)
 		if config.hdmicec.logenabledserial.value:
 			vtilog("[HDMICEC] "+logcmd)
+	if flag == 0:
+		from Screens.Standby import inStandby
+		if inStandby:
+			if hdmi_cec.log:
+				hdmi_cec.log.info(lineno() + "Power On by Remote Key")
+			inStandby.Power()
+		else:
+			if hdmi_cec.log:
+				hdmi_cec.log.info(lineno() + "Active Source by Remote Key")
+			hdmi_cec.sendMessages("active")
 	if config.hdmicec.avvolumecontrol.value and config.hdmicec.enabled.value and config.hdmicec.avinput.value != "0":
 		if key == 113 or key == 114 or key == 115:
 			address = int("5",16)
