@@ -354,6 +354,9 @@ def Plugins(**kwargs):
 		PluginDescriptor(where = [PluginDescriptor.WHERE_SESSIONSTART, PluginDescriptor.WHERE_AUTOSTART], fnc = autostart)]
 
 def volumekeyPressed(key, flag):
+	if hdmi_cec.log:
+		logcmd = lineno() + "Key: %3d  Flag: %3d" % (key, flag)
+		hdmi_cec.log.info(logcmd)
 	if config.hdmicec.avvolumecontrol.value and config.hdmicec.enabled.value and config.hdmicec.avinput.value != "0":
 		if key == 113 or key == 114 or key == 115:
 			address = int("5",16)
