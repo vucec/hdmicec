@@ -333,8 +333,8 @@ def autostart(reason, **kwargs):
 	global session
 	global log
 	if kwargs.has_key("session") and reason == 0:
-		if config.hdmicec.enabled.value:
-			if config.hdmicec.logenabledfile.value:
+		if True: # config.hdmicec.enabled.value:
+			if True: # config.hdmicec.logenabledfile.value:
 				hdmi_cec.log = logging.getLogger("VTI HDMI-CEC")
 				hdmi_cec.log.setLevel(logging.INFO)
 				loghandler = logging.FileHandler("/tmp/hdmicec.log")
