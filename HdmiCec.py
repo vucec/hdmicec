@@ -192,9 +192,11 @@ class HdmiCec:
 				if self.log:
 					self.log.info( loghdr() + "Queue :" + logcmd )
 				self.cecmessage_queue.append((cmd, addressvalue, logcmd))
-		if not delay:
-			self.sendCECMessage(delay = False)
-		else:
+#		if not delay:
+#			self.delayTimer.stop()
+#			self.sendCECMessage(delay = False)
+#		else:
+		if not self.delayTimer.isActive():
 			self.delayTimer.start(self.delayTimer_intervall, True)
 
 	def sendCECMessage(self, delay = True):
@@ -210,12 +212,12 @@ class HdmiCec:
 			if self.log:
 				self.log.info( loghdr() + logcmd )
 			if len(self.cecmessage_queue):
-				if not delay:
-					messagedelay = float(config.hdmicec.message_delay.value)/10.0
-					time.sleep(messagedelay)
-					self.sendCECMessage(delay = False)
-				else:
-					self.delayTimer.start(self.delayTimer_intervall, True)
+#				if not delay:
+#					messagedelay = float(config.hdmicec.message_delay.value)/10.0
+#					time.sleep(messagedelay)
+#					self.sendCECMessage(delay = False)
+#				else:
+				self.delayTimer.start(self.delayTimer_intervall, True)
 
 	def delayedActiveSourceMessage(self):
 		messagedelay = float(config.hdmicec.message_delay.value)/10.0
