@@ -23,6 +23,10 @@ from os import system
 
 import inspect
 
+def logline():
+    """Returns current line number in HdmiCec.py."""
+    return " H%03d " % inspect.currentframe().f_back.f_lineno
+
 def loghdr():
     """Returns log header with current line number in HdmiCec.py."""
     return "[VTI HDMI-CEC] H%03d  " % inspect.currentframe().f_back.f_lineno
@@ -139,41 +143,41 @@ class HdmiCec:
 			setnamemessage = int('0x47',16)
 			if message == "wakeup":
 				cmd = struct.pack('B', wakeupmessage)
-				logcmd = loghdr()+"** WakeUpMessage ** send message: %x to address %x" % (wakeupmessage, addressvalue)
+				logcmd = logline()+"** WakeUpMessage ** send message: %x to address %x" % (wakeupmessage, addressvalue)
 			elif message == "active":
 				addressvalue = addressvaluebroadcast
 				cmd = struct.pack('BBB', activesourcemessage,physaddress1,physaddress2)
-				logcmd = loghdr()+"** ActiveSourceMessage ** send message: %x:%x:%x to address %x" % (activesourcemessage,physaddress1,physaddress2,addressvalue)
+				logcmd = logline()+"** ActiveSourceMessage ** send message: %x:%x:%x to address %x" % (activesourcemessage,physaddress1,physaddress2,addressvalue)
 				self.delayed_Message_Timer = eTimer()
 				self.delayed_Message_Timer.start(20000, True)
 				self.delayed_Message_Timer.callback.append(self.delayedActiveSourceMessage)
 			elif message == "standby":
 				cmd = struct.pack('B', standbymessage)
-				logcmd = loghdr()+"** StandByMessage ** send message: %x to address %x" % (standbymessage, addressvalue)
+				logcmd = logline()+"** StandByMessage ** send message: %x to address %x" % (standbymessage, addressvalue)
 			elif message == "inactive":
 				addressvalue = addressvaluebroadcast
 				cmd = struct.pack('BBB', inactivesourcemessage,physaddress1,physaddress2)
-				logcmd = loghdr()+"** InActiveSourceMessage ** send message: %x:%x:%x to address %x" % (inactivesourcemessage,physaddress1,physaddress2,addressvalue)
+				logcmd = logline()+"** InActiveSourceMessage ** send message: %x:%x:%x to address %x" % (inactivesourcemessage,physaddress1,physaddress2,addressvalue)
 			elif message == "avpwron":
 				cmd = struct.pack('BB', sendkeymessage,sendkeypwronmessage)
 				addressvalue = addressvalueav
-				logcmd = loghdr()+"** Power on A/V ** send message: %x:%x to address %x" % (sendkeymessage, sendkeypwronmessage, addressvalue)
+				logcmd = logline()+"** Power on A/V ** send message: %x:%x to address %x" % (sendkeymessage, sendkeypwronmessage, addressvalue)
 			elif message == "avdeeppwroff":
 				cmd = struct.pack('BB',sendkeymessage,sendkeypwroffmessage)
 				addressvalue = addressvalueav
-				logcmd = loghdr()+"** Standby A/V (Deepstandby)** send message: %x:%x to address %x" % (sendkeymessage,sendkeypwroffmessage, addressvalue)
+				logcmd = logline()+"** Standby A/V (Deepstandby)** send message: %x:%x to address %x" % (sendkeymessage,sendkeypwroffmessage, addressvalue)
 			elif message == "avpwroff":
 				addressvalue = addressvalueav
 				cmd = struct.pack('BB',sendkeymessage,sendkeypwroffmessage)
-				logcmd = loghdr()+"** Standby A/V ** send message: %x:%x to address %x" % (sendkeymessage,sendkeypwroffmessage, addressvalue)
+				logcmd = logline()+"** Standby A/V ** send message: %x:%x to address %x" % (sendkeymessage,sendkeypwroffmessage, addressvalue)
 			elif message == "activevu":
 				addressvalue = addressvaluebroadcast
 				cmd = struct.pack('B', activevumessage)
-				logcmd = loghdr()+"** Active VU Message ** send message: %x to address %x" % (activevumessage,addressvalue)
+				logcmd = logline()+"** Active VU Message ** send message: %x to address %x" % (activevumessage,addressvalue)
 			elif message == "physaddress":
 				addressvalue = addressvaluebroadcast
 				cmd = struct.pack('BBBB',physaddressmessage,physaddress1,physaddress2,devicetypmessage)
-				logcmd = loghdr()+"** Report phys address %x:%x:%x:%x to %x" % (physaddressmessage,physaddress1,physaddress2,devicetypmessage,addressvalue)
+				logcmd = logline()+"** Report phys address %x:%x:%x:%x to %x" % (physaddressmessage,physaddress1,physaddress2,devicetypmessage,addressvalue)
 			elif message == "setdevicename":
 				cecmessage = setnamemessage
 				name_len = len(config.hdmicec.device_name.value)
@@ -183,8 +187,10 @@ class HdmiCec:
 				else:
 					cecmessagetwo = config.hdmicec.device_name.value
 					cmd = struct.pack('B'+str(name_len+1)+'s',cecmessage,cecmessagetwo)
-				logcmd = loghdr()+"** Send device name  %x:%s to %x" % (cecmessage,cecmessagetwo,addressvalue)
+				logcmd = logline()+"** Send device name  %x:%s to %x" % (cecmessage,cecmessagetwo,addressvalue)
 			if cmd and logcmd:
+				if self.log:
+					self.log.info( loghdr() + "Queue :" + logcmd )
 				self.cecmessage_queue.append((cmd, addressvalue, logcmd))
 		if not delay:
 			self.sendCECMessage(delay = False)
@@ -202,7 +208,7 @@ class HdmiCec:
 				#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
 				#	system(filelog)
 			if self.log:
-				self.log.info(logcmd)
+				self.log.info( loghdr() + logcmd )
 			if len(self.cecmessage_queue):
 				if not delay:
 					messagedelay = float(config.hdmicec.message_delay.value)/10.0
@@ -226,20 +232,28 @@ class HdmiCec:
 		from Screens.Standby import inStandby
 		if not inStandby:
 			cmd_active = struct.pack('BBB', activesourcemessage,physaddress1,physaddress2)
-			logcmd_active = loghdr()+"** ActiveSourceMessage ** send message: %x:%x:%x to address %x" % (activesourcemessage,physaddress1,physaddress2,addressvalue)
+			logcmd_active = logline()+"** ActiveSourceMessage ** send message: %x:%x:%x to address %x" % (activesourcemessage,physaddress1,physaddress2,addressvalue)
 			self.cecmessage_queue.append((cmd_active, addressvalue, logcmd_active))
+			if self.log:
+				self.log.info( loghdr() + "Queue :" + logcmd_active )
 			cmd_vu_is_active = struct.pack('B', activevumessage)
-			logcmd_vu_is_active = loghdr()+"** Active VU Message ** send message: %x to address %x" % (activevumessage,addressvalue)
+			logcmd_vu_is_active = logline()+"** Active VU Message ** send message: %x to address %x" % (activevumessage,addressvalue)
 			self.cecmessage_queue.append((cmd_vu_is_active, addressvalue, logcmd_vu_is_active))
+			if self.log:
+				self.log.info( loghdr() + "Queue :" + logcmd_vu_is_active )
 			cmd = struct.pack('BBBB',physaddressmessage,physaddress1,physaddress2,devicetypmessage)
-			logcmd = loghdr()+"** Report phys address %x:%x:%x:%x to %x" % (physaddressmessage,physaddress1,physaddress2,devicetypmessage,addressvaluebroadcast)
+			logcmd = logline()+"** Report phys address %x:%x:%x:%x to %x" % (physaddressmessage,physaddress1,physaddress2,devicetypmessage,addressvaluebroadcast)
 			self.cecmessage_queue.append((cmd, addressvaluebroadcast, logcmd))
+			if self.log:
+				self.log.info( loghdr() + "Queue :" + logcmd )
 			name_len = len(config.hdmicec.device_name.value)
 			if name_len > 0:
 					cecmessagetwo = config.hdmicec.device_name.value
 					cmd = struct.pack('B'+str(name_len+1)+'s',setnamemessage,config.hdmicec.device_name.value)
-					logcmd = loghdr()+"** Send device name  %x:%s to %x" % (setnamemessage,config.hdmicec.device_name.value,addressvalue)
+					logcmd = logline()+"** Send device name  %x:%s to %x" % (setnamemessage,config.hdmicec.device_name.value,addressvalue)
 					self.cecmessage_queue.append((cmd, addressvalue, logcmd))
+					if self.log:
+						self.log.info( loghdr() + "Queue :" + logcmd )
 			if not self.delayTimer.isActive():
 				self.delayTimer.start(self.delayTimer_intervall, True)
 
