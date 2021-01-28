@@ -144,9 +144,9 @@ class HdmiCec:
 				addressvalue = addressvaluebroadcast
 				cmd = struct.pack('BBB', activesourcemessage,physaddress1,physaddress2)
 				logcmd = lineno()+"** ActiveSourceMessage ** : %x:%x:%x -> %x" % (activesourcemessage,physaddress1,physaddress2,addressvalue)
-				self.delayed_Message_Timer = eTimer()
-				self.delayed_Message_Timer.start(20000, True)
-				self.delayed_Message_Timer.callback.append(self.delayedActiveSourceMessage)
+#				self.delayed_Message_Timer = eTimer()
+#				self.delayed_Message_Timer.start(20000, True)
+#				self.delayed_Message_Timer.callback.append(self.delayedActiveSourceMessage)
 			elif message == "standby":
 				cmd = struct.pack('B', standbymessage)
 				logcmd = lineno()+"** StandByMessage ** : %x -> %x" % (standbymessage, addressvalue)
