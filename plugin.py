@@ -384,7 +384,7 @@ CecMsg = {
 			0x36: "Standby",
 			0x46: "Request Device Name",
 			0x47: "Set Name",
-			0x80: "Active HDMI : ",
+			0x80: "Active HDMI from to : ",
 			0x82: "Active Source  PhyAdr : ",
 			0x83: "Request Physical Address",
 			0x84: "Physical Address : ",
