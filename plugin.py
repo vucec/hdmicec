@@ -368,7 +368,7 @@ def volumekeyPressed(key, flag):
 		hdmi_cec.log.info(logcmd)
 		if config.hdmicec.logenabledserial.value:
 			vtilog("[HDMICEC] "+logcmd)
-	if flag == 0:
+	if flag == 0 and key != 116:
 		from Screens.Standby import inStandby
 		if inStandby:
 			if hdmi_cec.log:
