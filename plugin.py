@@ -26,9 +26,9 @@ import logging
 
 import inspect
 
-def loghdr():
-    """Returns log header with current line number in plugin.py."""
-    return "[VTI HDMI-CEC] P%03d  " % inspect.currentframe().f_back.f_lineno
+def lineno():
+    """Returns current line number in plugin.py"""
+    return "P%03d  " % inspect.currentframe().f_back.f_lineno
 
 hdmi_cec = HdmiCec()
 
@@ -155,14 +155,14 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 		cecmessagetwo = physaddress1
 		cecmessagethree = physaddress2
 		cmd = struct.pack('BBB',cecmessage,cecmessagetwo,cecmessagethree)
-		logcmd = loghdr()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
+		logcmd = lineno()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
 
 		if cmd:
 			eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
 			
 		if logcmd:
 			if config.hdmicec.logenabledserial.value:
-				vtilog(logcmd)
+				vtilog("[HDMICEC] "+logcmd)
 				#if config.hdmicec.logenabledfile.value:
 				#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
 				#	system(filelog)
@@ -195,7 +195,7 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 			if val4 not in range(0,256):
 				val4 = 00
 			cmd = struct.pack('BBBB',val1,val2,val3,val4)
-			logcmd = loghdr()+"** Test Message ** Send message value: %x:%x:%x:%x to address %x" % (val1,val2,val3,val4,address)
+			logcmd = lineno()+"** Test Message ** Send message value: %x:%x:%x:%x to address %x" % (val1,val2,val3,val4,address)
 		else:
 
 			if tmp3:
@@ -209,7 +209,7 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 				if val3 not in range(0,256):
 					val3 = 00
 				cmd = struct.pack('BBB',val1,val2,val3)
-				logcmd = loghdr()+"** Test Message ** Send message value: %x:%x:%x to address %x" % (val1,val2,val3,address)
+				logcmd = lineno()+"** Test Message ** Send message value: %x:%x:%x to address %x" % (val1,val2,val3,address)
 			else:
 
 				if tmp2:
@@ -220,20 +220,20 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 					if val2 not in range(0,256):
 						val2 = 00
 					cmd = struct.pack('BB',val1,val2)
-					logcmd = loghdr()+"** Test Message ** Send message value: %x:%x to address %x" % (val1,val2,address)
+					logcmd = lineno()+"** Test Message ** Send message value: %x:%x to address %x" % (val1,val2,address)
 				else:
 					val1=int(tmp1,16)
 					if val1 not in range(0,256):
 						val1 = 00
 					cmd = struct.pack('B',val1)
-					logcmd = loghdr()+"** Test Message ** Send message value: %x to address %x" % (val1, address)
+					logcmd = lineno()+"** Test Message ** Send message value: %x to address %x" % (val1, address)
 
 		if cmd:
 			eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
 			
 		if logcmd:
 			if config.hdmicec.logenabledserial.value:
-				vtilog(logcmd)
+				vtilog("[HDMICEC] "+logcmd)
 				#if config.hdmicec.logenabledfile.value:
 				#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
 				#	system(filelog)
@@ -249,41 +249,41 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 			cecmessage = int("44",16)
 			cecmessagetwo = int("41",16)
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = lineno()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 		elif self["config"].getCurrent() == self.hdmiavvoldown:
 			address = int("5",16)
 			cecmessage = int("44",16)
 			cecmessagetwo = int("42",16)
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = lineno()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 		elif self["config"].getCurrent() == self.hdmiavvolmute:
 			address = int("5",16)
 			cecmessage = int("44",16)
 			cecmessagetwo = int("43",16)
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = lineno()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 		elif self["config"].getCurrent() == self.hdmiavpwron:
 			address = int("5",16)
 			cecmessage = int("44",16)
 			cecmessagetwo = int("6D",16)
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = lineno()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 		elif self["config"].getCurrent() == self.hdmiavpwroff:
 			address = int("5",16)
 			cecmessage = int("44",16)
 			cecmessagetwo = int("6C",16)
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = lineno()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 		elif self["config"].getCurrent() == self.hdmitvpwroff:
 			address = int("0",16)
 			cecmessage = int("36",16)
 			cmd = struct.pack('B',cecmessage)
-			logcmd = loghdr()+"send cec message %x to %x" % (cecmessage,address)
+			logcmd = lineno()+"send cec message %x to %x" % (cecmessage,address)
 		elif self["config"].getCurrent() == self.hdmitvpwron:
 			address = int("0",16)
 			cecmessage = int("04",16)
 			cmd = struct.pack('B',cecmessage)
-			logcmd = loghdr()+"send cec message %x to %x" % (cecmessage,address)
+			logcmd = lineno()+"send cec message %x to %x" % (cecmessage,address)
 		else:
 			ConfigListScreen.keySave(self)
 		if cmd:
@@ -291,7 +291,7 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 
 		if logcmd:
 			if config.hdmicec.logenabledserial.value:
-				vtilog(logcmd)
+				vtilog("[HDMICEC] "+logcmd)
 				#if config.hdmicec.logenabledfile.value:
 				#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
 				#	system(filelog)
@@ -340,7 +340,7 @@ def autostart(reason, **kwargs):
 				loghandler = logging.FileHandler("/tmp/hdmicec.log")
 				loghandler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
 				hdmi_cec.log.addHandler(loghandler)
-				hdmi_cec.log.info(loghdr()+"** PlugIn Start")
+				hdmi_cec.log.info(lineno()+"** PlugIn Start")
 			session = kwargs["session"]
 			if config.hdmicec.avvolumecontrol.value:
 				## from InfoBarGenerics.py
@@ -414,12 +414,12 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 	elif manual_address is not None and manual_cmd is not None:
 		message = manual_cmd
 		address = manual_address
-	#logcmd = loghdr()+"received cec message %x from %x" % (message, address)
-	logcmd = loghdr()+"%1x>%1x %02x (%s)" % (address&0xF, address>>4, message, CecMsg.get(message, "Unknown Message"))
+	#logcmd = lineno()+"received cec message %x from %x" % (message, address)
+	logcmd = lineno()+"%1x>%1x %02x (%s)" % (address&0xF, address>>4, message, CecMsg.get(message, "Unknown Message"))
 	for ci in range(length):
 		logcmd += " %02x" % ord(data[ci])
 	if config.hdmicec.logenabledserial.value:
-		vtilog(logcmd)
+		vtilog("[HDMICEC] "+logcmd)
 		#if config.hdmicec.logenabledfile.value:
 		#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
 		#	system(filelog)
@@ -471,14 +471,14 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 			if (inStandby) and (config.hdmicec.vuwakeup_message.value == "vuwakeup"):
 				cecmessagetwo = powerstateOff
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = lineno()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 
 		if message == 0x9f: # request cec version
 			address = addresstv
 			cecmessage = cecversionreportmessage
 			cecmessagetwo = cecversionmessage
 			cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-			logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = lineno()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 
 		elif message == 0x83: # request physical address
 			if (inStandby) and (config.hdmicec.vuwakeup_message.value == "vuwakeup"):
@@ -489,7 +489,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 			cecmessagethree = physaddress2
 			cecmessagefour = devicetypmessage
 			cmd = struct.pack('BBBB',cecmessage,cecmessagetwo,cecmessagethree,cecmessagefour)
-			logcmd = loghdr()+"send cec message %x:%x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,cecmessagefour,address)
+			logcmd = lineno()+"send cec message %x:%x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,cecmessagefour,address)
 
 		elif message == 0x86:
 			physicaladdress = ord(data[0]) * 256 + ord(data[1])
@@ -503,7 +503,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 				cecmessagetwo = physaddress1
 				cecmessagethree = physaddress2
 				cmd = struct.pack('BBB',cecmessage,cecmessagetwo,cecmessagethree)
-				logcmd = loghdr()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
+				logcmd = lineno()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
 				eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
 				if config.hdmicec.enabletvrc.value:
 					addresstwo = addresstv
@@ -512,7 +512,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 					cmdtwo = struct.pack('BB',cecmessage,cecmessagetwo)
 					eHdmiCEC.getInstance().sendMessage(addresstwo, len(cmdtwo), str(cmdtwo))
 			else:
-				logcmd = loghdr()+"received %x with data %x my conf %s" % (message,physicaladdress, confAddress)
+				logcmd = lineno()+"received %x with data %x my conf %s" % (message,physicaladdress, confAddress)
 
 		elif message == 0x8d: # request menu state
 			if config.hdmicec.enabletvrc.value:
@@ -520,7 +520,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 				cecmessage = menuonmessage
 				cecmessagetwo = menustatemessage
 				cmd = struct.pack('BB',cecmessage,cecmessagetwo)
-				logcmd = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+				logcmd = lineno()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 
 		elif message == 0x46: # request device name
 			address = addresstv
@@ -532,7 +532,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 			else:
 				cecmessagetwo = config.hdmicec.device_name.value
 				cmd = struct.pack('B'+str(name_len+1)+'s',cecmessage,cecmessagetwo)
-			logcmd = loghdr()+"send cec message %x:%s to %x" % (cecmessage,cecmessagetwo,address)
+			logcmd = lineno()+"send cec message %x:%s to %x" % (cecmessage,cecmessagetwo,address)
 
 		elif message == 0x85: # request active source
 			if not inStandby:
@@ -542,13 +542,13 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 					cecmessagetwo = physaddress1
 					cecmessagethree = physaddress2
 					cmd = struct.pack('BBB',cecmessage,cecmessagetwo,cecmessagethree)
-					logcmd = loghdr()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
+					logcmd = lineno()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
 				if config.hdmicec.enabletvrc.value:
 					addresstwo = addresstv
 					cecmessage = menuonmessage
 					cecmessagetwo = menustatemessage
 					cmdtwo = struct.pack('BB',cecmessage,cecmessagetwo)
-					logcmdtwo = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+					logcmdtwo = lineno()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 			elif inStandby:
 				if config.hdmicec.vuwakeup_message.value == "vuwakeup":
 					inStandby.Power()
@@ -557,22 +557,22 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 					cecmessagetwo = physaddress1
 					cecmessagethree = physaddress2
 					cmd = struct.pack('BBB',cecmessage,cecmessagetwo,cecmessagethree)
-					logcmd = loghdr()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
+					logcmd = lineno()+"send cec message %x:%x:%x to %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
 					if config.hdmicec.enabletvrc.value:
 						addresstwo = addresstv
 						cecmessage = menuonmessage
 						cecmessagetwo = menustatemessage
 						cmdtwo = struct.pack('BB',cecmessage,cecmessagetwo)
-						logcmdtwo = loghdr()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
+						logcmdtwo = lineno()+"send cec message %x:%x to %x" % (cecmessage,cecmessagetwo,address)
 
 		elif message == 0x36:
 			if config.hdmicec.vustandby_message.value == "vustandby":
 				if inStandby == None:
-					logcmd = loghdr()+"VU+ STB goto standby"
+					logcmd = lineno()+"VU+ STB goto standby"
 					session.open(Standby)
 			elif config.hdmicec.vustandby_message.value == "vudeepstandby":
 				import Screens.Standby
-				logcmd = loghdr()+"VU+ STB goto deepstandby"
+				logcmd = lineno()+"VU+ STB goto deepstandby"
 				session.open(Screens.Standby.TryQuitMainloop,1)
 
 		if inStandby == None:
@@ -582,7 +582,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 				eHdmiCEC.getInstance().sendMessage(addresstwo, len(cmdtwo), str(cmdtwo))
 			if logcmd:
 				if config.hdmicec.logenabledserial.value:
-					vtilog(logcmd)
+					vtilog("[HDMICEC] "+logcmd)
 					#if config.hdmicec.logenabledfile.value:
 					#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
 					#	system(filelog)
@@ -590,7 +590,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 					hdmi_cec.log.info(logcmd)
 			if logcmdtwo:
 				if config.hdmicec.logenabledserial.value:
-					vtilog(logcmdtwo)
+					vtilog("[HDMICEC] "+logcmdtwo)
 					#if config.hdmicec.logenabledfile.value:
 					#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmdtwo)
 					#	system(filelog)
@@ -598,11 +598,11 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 					hdmi_cec.log.info(logcmdtwo)
 
 def messageReceivedKey(address, message):
-	#logcmd = loghdr()+"received cec message part two %x from %x" % (message, address)
-	logcmd = loghdr()+"RecvK %02x: %02x" % (address, message)
+	#logcmd = lineno()+"received cec message part two %x from %x" % (message, address)
+	logcmd = lineno()+"RecvK %02x: %02x" % (address, message)
 	if logcmd:
 		if config.hdmicec.logenabledserial.value:
-			vtilog(logcmd)
+			vtilog("[HDMICEC] "+logcmd)
 			#if config.hdmicec.logenabledfile.value:
 			#	filelog = "echo %s >> /tmp/hdmicec.log" % (logcmd)
 			#	system(filelog)
