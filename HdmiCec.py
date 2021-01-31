@@ -197,7 +197,7 @@ class HdmiCec:
 		self.delayTimer.stop()
 		if len(self.cecmessage_queue):
 			cmd, addressvalue, logcmd = self.cecmessage_queue.pop(0)
-			eHdmiCEC.getInstance().sendMessage(addressvalue, len(cmd), str(cmd))
+			pass # eHdmiCEC.getInstance().sendMessage(addressvalue, len(cmd), str(cmd))
 			if config.hdmicec.logenabledserial.value:
 				vtilog("[HDMICEC] "+logcmd)
 				#if config.hdmicec.logenabledfile.value:

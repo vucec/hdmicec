@@ -158,7 +158,7 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 		logcmd = lineno()+"** send cec %x:%x:%x -> %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
 
 		if cmd:
-			eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
+			pass # eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
 			
 		if logcmd:
 			if config.hdmicec.logenabledserial.value:
@@ -229,7 +229,7 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 					logcmd = lineno()+"** Test Message ** : %x -> %x" % (val1, address)
 
 		if cmd:
-			eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
+			pass # eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
 			
 		if logcmd:
 			if config.hdmicec.logenabledserial.value:
@@ -287,7 +287,7 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 		else:
 			ConfigListScreen.keySave(self)
 		if cmd:
-			eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
+			pass # eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
 
 		if logcmd:
 			if config.hdmicec.logenabledserial.value:
@@ -396,7 +396,7 @@ def volumekeyPressed(key, flag):
 				if cecmessagekeyevent:
 					cmd = struct.pack('BB',cecmessagesendkey,cecmessagekeyevent)
 			if cmd:
-				eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
+				pass # eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
 			return 1
 	return 0
 
@@ -528,13 +528,13 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 				cecmessagethree = physaddress2
 				cmd = struct.pack('BBB',cecmessage,cecmessagetwo,cecmessagethree)
 				logcmd = lineno()+"** send cec %x:%x:%x -> %x" % (cecmessage,cecmessagetwo,cecmessagethree,address)
-				eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
+				pass # eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
 				if config.hdmicec.enabletvrc.value:
 					addresstwo = addresstv
 					cecmessage = menuonmessage
 					cecmessagetwo = menustatemessage
 					cmdtwo = struct.pack('BB',cecmessage,cecmessagetwo)
-					eHdmiCEC.getInstance().sendMessage(addresstwo, len(cmdtwo), str(cmdtwo))
+					pass # eHdmiCEC.getInstance().sendMessage(addresstwo, len(cmdtwo), str(cmdtwo))
 			else:
 				logcmd = lineno()+"received %x with data %x my conf %s" % (message,physicaladdress, confAddress)
 
@@ -601,9 +601,9 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 
 		if inStandby == None:
 			if cmd:
-				eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
+				pass # eHdmiCEC.getInstance().sendMessage(address, len(cmd), str(cmd))
 			if cmdtwo:
-				eHdmiCEC.getInstance().sendMessage(addresstwo, len(cmdtwo), str(cmdtwo))
+				pass # eHdmiCEC.getInstance().sendMessage(addresstwo, len(cmdtwo), str(cmdtwo))
 			if logcmd:
 				if config.hdmicec.logenabledserial.value:
 					vtilog("[HDMICEC] "+logcmd)
