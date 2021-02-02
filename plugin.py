@@ -353,9 +353,18 @@ def Plugins(**kwargs):
 	return [PluginDescriptor(name=_("VTI HDMI-CEC"), description="VTI HDMI-CEC Configuration", where = PluginDescriptor.WHERE_PLUGINMENU, icon="hdmicec.png", needsRestart = True, fnc=openconfig),
 		PluginDescriptor(where = [PluginDescriptor.WHERE_SESSIONSTART, PluginDescriptor.WHERE_AUTOSTART], fnc = autostart)]
 
+RemoteKey = {
+   2:"1", 3:"2", 4:"3", 5:"4", 6:"5", 7:"6", 8:"7", 9:"8", 10:"9", 11:"0",
+ 102:"home", 103:"Up", 105:"Left", 106:"Right", 107:"end", 108:"Down", 113:"mute", 114:"volume down", 115:"volume up", 
+ 116:"Power", 119:"Pause", 128:"Stop", 138:"help", 139:"Menu", 167:"Record", 168:"FastRewind", 174:"Exit", 207:"Play", 
+ 208:"FastForward", 352:"OK", 358:"EPG", 370:"Subtitle", 377:"TV", 385:"Radio", 388:"text", 392:"Audio", 393:"PVR", 
+ 398:"red", 399:"green", 400:"yellow", 401:"blue", 402:"CH+", 403:"CH-", 407:"next", 412:"previous"
+}
+RemoteKeyState = { 0:"press", 1:"release", 2:"repeat" }
+
 def volumekeyPressed(key, flag):
 	if hdmi_cec.log:
-		logcmd = lineno() + "Key: %3d  Flag: %3d" % (key, flag)
+		logcmd = lineno() + "Key: %s %s %3d %d" % (RemoteKey.get(key, "Unknown"), RemoteKeyState.get(flag, "Unknown"), key, flag)
 		hdmi_cec.log.info(logcmd)
 	if config.hdmicec.avvolumecontrol.value and config.hdmicec.enabled.value and config.hdmicec.avinput.value != "0":
 		if key == 113 or key == 114 or key == 115:
