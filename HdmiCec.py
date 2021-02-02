@@ -134,7 +134,7 @@ class HdmiCec:
 			activevumessage=int("85",16)
 			physaddressmessage = int('0x84',16)
 			devicetypmessage = int('0x01',16)
-			physaddress1 = int("0x" + str(config.hdmicec.tvinput.value) + str(config.hdmicec.avinput.value),16)
+			physaddress1 = int("0x" + str(config.hdmicec.tvinput.value) + "0",16)
 			physaddress2 = int("0x00",16)
 			setnamemessage = int('0x47',16)
 			if message == "wakeup":
@@ -219,7 +219,7 @@ class HdmiCec:
 		activesourcemessage=int("82",16)
 		activevumessage=int("85",16)
 		addressvalue = int("0",16)
-		physaddress1 = int("0x" + str(config.hdmicec.tvinput.value) + str(config.hdmicec.avinput.value),16)
+		physaddress1 = int("0x" + str(config.hdmicec.tvinput.value) + "0",16)
 		physaddress2 = int("0x00",16)
 		setnamemessage = int('0x47',16)
 		addressvalue = addressvaluebroadcast

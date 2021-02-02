@@ -148,7 +148,7 @@ class HdmiCecPlugin(Screen,ConfigListScreen):
 	def keyDisconnect(self):
 		cmd = None
 		logcmd = None
-		physaddress1 = int("0x" + str(config.hdmicec.tvinput.value) + str(config.hdmicec.avinput.value),16)
+		physaddress1 = int("0x" + str(config.hdmicec.tvinput.value) + "0",16)
 		physaddress2 = int("0x00",16)
 		address = int('0',16)
 		cecmessage = int('0x9D',16)
@@ -460,7 +460,7 @@ def messageReceived(cecdata, manual_address = None, manual_cmd = None ):
 		logcmd = None
 		logcmdtwo = None
 
-		physaddress1 = int("0x" + str(config.hdmicec.tvinput.value) + str(config.hdmicec.avinput.value),16)
+		physaddress1 = int("0x" + str(config.hdmicec.tvinput.value) + "0",16)
 		physaddress2 = int("0x00",16)
 
 		addresstv = int("0x00",16)
