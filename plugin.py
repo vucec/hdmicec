@@ -366,6 +366,8 @@ def volumekeyPressed(key, flag):
 	if hdmi_cec.log:
 		logcmd = lineno() + "Key: %s %s %3d %d" % (RemoteKey.get(key, "Unknown"), RemoteKeyState.get(flag, "Unknown"), key, flag)
 		hdmi_cec.log.info(logcmd)
+		if config.hdmicec.logenabledserial.value:
+			vtilog("[HDMICEC] "+logcmd)
 	if config.hdmicec.avvolumecontrol.value and config.hdmicec.enabled.value and config.hdmicec.avinput.value != "0":
 		if key == 113 or key == 114 or key == 115:
 			address = int("5",16)
